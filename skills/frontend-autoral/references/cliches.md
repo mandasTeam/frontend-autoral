@@ -20,6 +20,12 @@ O sinal de alarme é o acúmulo. Um item isolado com motivo é decisão; vários
 8. Identidade e originalidade
 9. Consistência e implementação
 10. Princípios obrigatórios
+11. Remover não basta
+
+A maior parte desta lista é medida automaticamente pelo lint e pelo inspetor
+(`scripts/inspecionar.mjs`, regras da taste-skill entre parênteses abaixo, ex.: `eyebrow`). O
+registro datado completo, com a origem de cada "tell" em ondas (2023–2026), está em
+`vendor/taste-skill/references/tells.md`.
 
 ---
 
@@ -41,7 +47,13 @@ comuns; trate-os como padrão também.
 E a "moldura de template" que costuma vir com qualquer um deles: rótulo em caixa-alta espaçada
 acima de todo título, metadados "A · B · C", rótulos "PALAVRA — fragmento", `#0B0B0B`/`#111`
 como preto padrão, rótulos mono minúsculos em tudo, "→" em todo link, numeração 01/02/03 em
-conteúdo que não é sequência.
+conteúdo que não é sequência (`eyebrow`, `micro-label`, `mono`, `numbering`).
+
+Moda de galeria que virou fantasia de "site premiado" e também é padrão aqui: filetes finos e caixas
+com contorno de 1 px (`hairline`, `outlined-box`), marcas de ferramenta de design como enfeite (cruz
+de mira, marca de corte, guias tracejadas, réguas), micro-metadados de agência (hora local,
+coordenadas, clima, número de versão, "©2026 — Role"), bolinha pulsante de "disponível" ou "ao
+vivo", pílula "Novo ·" acima do título.
 
 ## 2. Layout e estrutura
 
@@ -61,6 +73,12 @@ conteúdo que não é sequência.
 - Sacrificar a hierarquia em favor da simetria artificial.
 - Estruturas previsíveis só porque são comuns em templates (hero, logos, 3 features,
   números, depoimentos, preço, FAQ, CTA final). Cada seção precisa justificar a existência.
+- Bento grid de blocos arredondados como seção de funcionalidades (`card-rows`).
+- Margens externas desiguais; seção com texto numa metade e a outra metade vazia (`lopsided`,
+  `off-centre`); trecho vazio maior que meia tela (`blank-gap`, `empty-screens`). Assimetria mora
+  dentro da grade, nunca na moldura.
+- Tudo centralizado (`all-centred`); seção corrida sem título que a nomeie (`untitled-section`).
+- Navegação em pílula flutuante com blur (`pill-nav`, `glass`).
 
 ## 3. Cores, gradientes e efeitos
 
@@ -70,7 +88,9 @@ conteúdo que não é sequência.
 - Glassmorphism indiscriminado.
 - Blur decorativo em vários elementos.
 - Manchas luminosas, auroras, halos ou blobs como decoração.
-- Sombras exageradas em todos os componentes.
+- Sombras exageradas em todos os componentes. Sombra é para o que flutua de verdade (menu,
+  diálogo, barra fixa); superfícies em repouso se separam por um degrau de tom (`shadow`).
+- Texto corrido em cinza-claro; página "suave" demais parece inacabada (`grey-body`).
 - Bordas com gradiente chamativo.
 - Cores vibrantes misturadas sem paleta coerente.
 - Fundos com partículas, pontos luminosos ou formas abstratas sem propósito.
@@ -92,6 +112,9 @@ conteúdo que não é sequência.
 - Fonte ou peso escolhidos só por parecerem modernos.
 - Sacrificar legibilidade, acessibilidade ou consistência por efeito.
 - Caixa-alta espaçada em rótulos por padrão.
+- Título com mais de duas linhas em qualquer largura (`headline-lines`): é frase, não título.
+- Mais de cinco tamanhos de fonte na página, ou nove tamanhos quase iguais (`size-count`).
+- Mono fora de bloco de código real (`mono`).
 
 ## 5. Cards, botões, ícones e componentes
 
@@ -103,7 +126,9 @@ conteúdo que não é sequência.
 - Lucide ou qualquer biblioteca como identidade visual.
 - Ícone genérico no lugar de imagem, ilustração ou elemento específico do produto.
 - Emoji no lugar de ícone.
-- Botão pílula por padrão.
+- Botão pílula por padrão. E também o raio "suave" de 9–16 px em tudo, que é o padrão dos sites
+  fracos do estudo da taste-skill: botão é reto ou totalmente redondo, decidido uma vez.
+- Botão com gradiente, sombra ou brilho (`button-fx`).
 - Badges decorativas em títulos e componentes ("Novo", "Beta", "✨ AI").
 - "AI-Powered", "Next-Gen", "Revolucionário" e equivalentes para parecer moderno.
 - Mockup genérico de dashboard ou interface fictícia.
@@ -122,8 +147,14 @@ conteúdo que não é sequência.
 - Transições lentas (acima de ~300 ms) em interações simples.
 - Elementos deslizando, flutuando ou girando sem motivo.
 - Animação acima de desempenho, acessibilidade e usabilidade.
-- Ignorar `prefers-reduced-motion`.
+- Ignorar `prefers-reduced-motion`, ou deixar conteúdo invisível quando ele está ligado
+  (`reduced-hidden`).
 - Animação para esconder interface fraca.
+- Loop de atenção sem significado: pulso, bounce, bolinha piscando.
+- `ease-in` em interface, entrada a partir de `scale(0)`, `transition: all`, animação em ação de
+  teclado (`movimento.md`).
+- Revelação que falha e deixa uma faixa em branco; título que só aparece depois de uma animação
+  (`late-title`).
 
 ## 7. Textos e conteúdo
 
@@ -185,6 +216,23 @@ Detalhe e vocabulário em `copy.md`.
 - Nem excesso de decoração, nem minimalismo genérico.
 - Antes de acrescentar um elemento, avaliar se ele melhora compreensão, função, estética ou
   experiência.
+
+## 11. Remover não basta
+
+Uma página da qual se tirou todo clichê e não se pôs nada no lugar é uma página vazia de boas
+maneiras, e isso também denuncia IA (a "estética da evitação": qualquer um adivinharia a página a
+partir da categoria mais a lista do que evitar). Nos testes cegos da taste-skill, a página rica e
+cheia de clichês venceu a limpa e rala todas as vezes.
+
+O espaço que sobra não se preenche com outro enfeite. Preenche-se com:
+
+- **escala:** a coisa principal maior;
+- **conteúdo completo:** o cardápio inteiro com preços, cada quarto com seus detalhes, o preço com
+  o que inclui, uma resposta para cada pergunta real;
+- **imagem do assunto:** real, de acervo ou desenhada com cuidado (`imagens.md`);
+- **campo de cor chapada** inteiro.
+
+Vazio deliberado: no máximo uma vez por página.
 
 **Regra final:** nenhuma solução visual genérica só porque é comum em interface gerada por IA.
 Nada de efeito, componente, animação, texto ou decoração por padrão. Analise o contexto e tome

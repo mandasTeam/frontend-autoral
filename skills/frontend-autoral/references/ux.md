@@ -14,10 +14,14 @@ e heurísticas de Nielsen.
 6. Responsividade e toque
 7. Desempenho
 8. Detalhes de conteúdo e localização
+9. Dados de pior caso
 
 ---
 
 ## 1. Princípios de UX
+
+As 30 leis de UX (Hick, Fitts, Jakob, Miller, Doherty, Gestalt, pico-fim...) aplicadas, com uma
+forma de conferir cada uma, estão em `leis-ux.md`. Abaixo, o mínimo de toda tela.
 
 - **Tarefa principal primeiro.** O que a pessoa veio fazer precisa estar visível e acionável
   sem esforço. Tudo o resto é secundário.
@@ -36,6 +40,12 @@ e heurísticas de Nielsen.
 - **Carga cognitiva baixa.** Poucas escolhas por vez, agrupamento claro, divulgação progressiva
   para o avançado.
 - **Lei de Fitts.** Alvos importantes grandes e perto de onde a atenção está.
+- **Lei de Jakob.** Visual autoral, mecânica convencional: navegação, links, formulários e
+  carrinho funcionam como em qualquer site.
+- **Limiar de Doherty.** Resposta visível em ≤ 100 ms a todo clique e conclusão ou indicador em
+  < 400 ms; UI otimista e esqueleto em vez de tela branca.
+- **Lei de Postel.** Aceite formatos variados na entrada (telefone com ou sem máscara, data em
+  vários formatos, colar), devolva sempre limpo e no mesmo formato.
 - **A URL reflete o estado** (filtro, aba, página) para poder compartilhar e voltar.
 
 ## 2. Semântica e acessibilidade
@@ -105,10 +115,14 @@ Teste com conteúdo curto, médio e muito longo. Use `min-width: 0` em filhos de
 - Composição muda de verdade no celular: o que era duas colunas vira ordem de leitura pensada,
   não só empilhamento.
 - Alvos de toque ≥ 44 × 44 px, com espaço entre eles.
-- `100dvh` em vez de `100vh`; `env(safe-area-inset-*)` em barras fixas.
+- `100dvh` em app e barra fixa embaixo; `100svh` em hero de site (não pula ao rolar).
+  `env(safe-area-inset-*)` em barras fixas, com `viewport-fit=cover` no meta viewport.
 - Sem rolagem horizontal acidental. Tabelas largas rolam dentro do próprio container.
 - `touch-action: manipulation` em controles; `overscroll-behavior: contain` em modais e gavetas.
-- Hover não pode ser o único caminho para uma informação (não existe hover no toque).
+- Hover não pode ser o único caminho para uma informação (não existe hover no toque); hover com
+  efeito fica em `@media (hover: hover) and (pointer: fine)`.
+- Campo com `font-size` ≥ 16 px (senão o iOS dá zoom); `-webkit-tap-highlight-color: transparent`
+  com um `:active` próprio. Tabela completa de sensação de app em `movimento.md` §9.
 - Tipografia fluida com `clamp()`; imagens com `srcset`/`sizes`.
 
 ## 7. Desempenho
@@ -128,7 +142,29 @@ Teste com conteúdo curto, médio e muito longo. Use `min-width: 0` em filhos de
 
 - Datas, números e moedas com `Intl` (`pt-BR`): 1.234,56; R$ 9,90; 1º de novembro de 2026.
 - Nome de marca e código: `translate="no"`.
-- `<meta name="theme-color">` com a cor de fundo; `color-scheme` coerente.
+- `<meta name="theme-color">` com a cor de fundo, um por `prefers-color-scheme` se houver tema
+  escuro; `color-scheme` coerente.
 - Título da página e `meta description` específicos, não "Home | Empresa".
-- Favicon próprio, não o padrão do framework.
+- Favicon e ícones próprios, não o padrão do framework: `favicon.svg` + `favicon.ico`,
+  `apple-touch-icon` 180, ícones 192/512 e `maskable` no `site.webmanifest` (`icones.md`).
 - `select` nativo com cores explícitas (no tema escuro o Windows mostra branco se não definir).
+
+## 9. Dados de pior caso
+
+Adaptado de `break-ui` (Emil Kowalski). Antes de dar a tela por pronta, troque os dados de exemplo
+pelos piores realistas e olhe de novo. Domínios de teste: `example.com`, `.test`.
+
+| Tipo | Valores para testar | O que quebra |
+|---|---|---|
+| Nomes | `Maria Aparecida dos Santos Albuquerque-Figueiredo`, `Jo`, `J`, `João D'Ávila`, `王秀英`, `نور الهدى` (RTL), `🦊 Raposa`, nome ausente | linha que estoura, iniciais erradas (`charAt(0)` parte emoji), RTL sem `dir="auto"`, falta de fallback |
+| E-mails, URLs, IDs | `bartolomeu.fitzgerald@industrias-reunidas-do-nordeste.example.com`, URL longa com query, UUID, `Relatório FINAL (revisado) v12 [aprovado].pdf` | texto sem espaço empurra a linha (`overflow-wrap: anywhere`), truncamento no fim esconde o que importa (prefira truncar no meio) |
+| Rótulos e textos | cargo de três linhas, `Configurações de privacidade e segurança`, 12 etiquetas num item, título vazio ou só espaços, `<script>alert(1)</script>`, texto colado de 2.000 caracteres | quebra em parede de etiquetas (use `+8`), linha de altura zero, escape, falta de "ver mais" |
+| Números e dinheiro | `0`, `1`, `1284`, `1000000`, `R$ 12.345.678,90`, `-42,5`, `0.1 + 0.2`, `142%`, `null`/`NaN`, valor que muda ao vivo | plural ("1 itens"), separador de milhar, coluna de total estourada, barra além de 100%, `NaN` na tela, tremor sem `tabular-nums` |
+| Coleções | 0, 1, exatamente o tamanho da página e +1, 1.000+ sem paginação, um item 10× maior, nomes repetidos | estado vazio inexistente, grade "quebrada" com 1 item, página 2 vazia, rolagem lenta |
+| Tempo | agora, 12 dias, 11 meses, 3 anos, data futura, `1970-01-01`, virada de dia por fuso | "há 0 segundos", relativo eterno (vire data absoluta após ~1 semana), "há -3 dias" |
+| Imagens | avatar que dá 404, sem avatar, panorama 4000×200, retrato 200×4000, logo transparente escuro no tema escuro, imagem lenta | ícone quebrado sem fallback de iniciais, distorção sem `object-fit`, CLS sem `aspect-ratio` |
+| Estados | carregando, erro da API, dados parciais, todos os status juntos, sem permissão, o próprio usuário na lista | esqueleto diferente do final, erro cru (`TypeError...`), linhas desalinhadas, ações que não se aplicam a si mesmo |
+| Ambiente | container de 320 px, coluna lateral de 280 px, tela de 2560 px, zoom 200%, tema escuro, `dir="rtl"`, toque | tudo acima ao mesmo tempo, linhas longas demais, alturas fixas cortando texto, ações só no hover |
+
+Use `Intl.NumberFormat`, `Intl.DateTimeFormat`, `Intl.RelativeTimeFormat` e `Intl.PluralRules`
+com `pt-BR`, nunca string montada à mão.

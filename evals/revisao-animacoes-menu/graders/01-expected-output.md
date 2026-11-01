@@ -1,0 +1,7 @@
+---
+type: llm
+focus: trace
+weight: 1
+---
+
+The result matches this description: Revisão sem preâmbulo, agrupada por gravidade, numa tabela Onde | Antes | Depois | Por quê (não em lista "Antes:/Depois:"), apontando transition all, ease-in na abertura, scale(0), duração de 600 ms, transform-origin no centro do popover, animação disparada pelo atalho Ctrl+K usado dezenas de vezes por dia (recomenda abrir e fechar sem animação pelo teclado), hover com scale(1.1) sem media query, ausência de :active e de prefers-reduced-motion, com valores concretos (ease-out forte, 150–250 ms, scale(0.95)+opacity, scale(0.97) no active) e fechando com as três mudanças mais importantes.
