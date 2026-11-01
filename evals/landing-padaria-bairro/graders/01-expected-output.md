@@ -1,0 +1,7 @@
+---
+type: llm
+focus: trace
+weight: 1
+---
+
+The result matches this description: Página única em HTML/CSS com direção de arte própria derivada da padaria (DESIGN.md ou plano no topo), sem hero SaaS centralizado nem gradientes roxos, com horário, endereço e encomenda por WhatsApp usando só os dados dados, sem depoimentos ou números inventados, acessível e responsiva, conferida em screenshot.

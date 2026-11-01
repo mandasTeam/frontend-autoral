@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: dashboard-financeiro-mei
+expected_outcome: |
+  Componente React + Tailwind com hierarquia clara centrada no limite do MEI, estados vazio/carregando/erro pensados, dados mockados claramente marcados como exemplo, sem grade de cards idênticos com ícone em quadrado colorido, tokens definidos, acessível.
